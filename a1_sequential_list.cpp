@@ -206,7 +206,7 @@ void SequentialList::sort_asc()
 		for(int i=0;i<size_;i++){
 			for(int j=i;j<size_;j++){
 				if (data_[i]>data_[j]){
-					int temp=data_[j];
+					DataType temp=data_[j];
 					data_[j]=data_[i];
 					data_[i]=temp;
 				}
@@ -222,7 +222,7 @@ void SequentialList::sort_desc()
 		for(int i=0;i<size_;i++){
 			for(int j=i;j<size_;j++){
 				if (data_[i]<data_[j]){
-					int temp=data_[j];
+					DataType temp=data_[j];
 					data_[j]=data_[i];
 					data_[i]=temp;
 				}
