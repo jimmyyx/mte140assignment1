@@ -259,14 +259,11 @@ bool DoublyLinkedList::insert_sorted_asc(DataType val){
 	}
 	else if (is_sorted_asc()){
 		Node* cur = head_;
-		if (cur==NULL){
-			return this->insert(val, 0);
-		}
 		int index=0;
-		// Breaks right here
 		while (cur->value<val && index<size_){
 			index++;
-			cur=cur->next;
+			if (cur->next)
+				cur=cur->next;
 		}
 		return this->insert (val, index);
 	}
@@ -282,13 +279,11 @@ bool DoublyLinkedList::insert_sorted_desc(DataType val)
 	}
 	else if (is_sorted_desc()){
 		Node* cur = head_;
-		if (cur==NULL){
-			return this->insert(val, 0);
-		}
 		int index=0;
 		while (cur->value>val&&index<size_){
 			index++;
-			cur=cur->next;
+			if (cur->next)
+				cur=cur->next;
 		}
 		return this->insert (val, index);
 	}
@@ -298,23 +293,32 @@ bool DoublyLinkedList::insert_sorted_desc(DataType val)
 
 void DoublyLinkedList::sort_asc()
 {
-//	if (size_>1){
-//		for(int i=0;i<size_;i++){
-//			for(int j=i;j<size_;j++){
-//				if (data_[i]>data_[j]){
-//					int temp=data_[j];
-//					data_[j]=data_[i];
-//					data_[i]=temp;
-//				}
-//			}
-//			
-//		}
-//	}
+	if (size_>1){
+		for(int i=0;i<size_;i++){
+			for(int j=i;j<size_;j++){
+				if (select(i)>select(j)){
+					DataType temp=select(j);
+					replace(j, select(i));
+					replace(i, temp);
+				}
+			}
+		}
+	}
 }
 
 void DoublyLinkedList::sort_desc()
 {
-	
+	if (size_>1){
+		for(int i=0;i<size_;i++){
+			for(int j=i;j<size_;j++){
+				if (select(i)<select(j)){
+					DataType temp=select(j);
+					replace(j, select(i));
+					replace(i, temp);
+				}
+			}
+		}
+	}
 }
 
 
