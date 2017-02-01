@@ -225,16 +225,3 @@ void SequentialList::sort_desc()
 }
 
 
-int main ()
-{
-	SequentialList* a = new SequentialList(5);
-	for (int i= 5; i > 0; i--)
-	{
-		a->insert_back(i);
-	}
-	a->print();
-	cout << a->is_sorted_desc();
-	a->sort_asc();
-	a->print();
-}
-

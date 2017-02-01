@@ -38,6 +38,7 @@ DoublyLinkedList::~DoublyLinkedList()
 	}
 }
 
+
 unsigned int DoublyLinkedList::size() const
 {
 	return size_;
