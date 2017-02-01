@@ -18,22 +18,22 @@ SequentialList::~SequentialList()
 
 unsigned int SequentialList::size() const
 {
-	return this->size_;
+	return size_;
 }
 
 unsigned int SequentialList::capacity() const
 {
-	return this->capacity_;
+	return capacity_;
 }
 
 bool SequentialList::empty() const
 {
-	return this->size_ == 0;
+	return size_ == 0;
 }
 
 bool SequentialList::full() const
 {
-	return this->size_ == this->capacity_;
+	return size_ == capacity_;
 }
 
 SequentialList::DataType SequentialList::select(unsigned int index) const
@@ -49,24 +49,24 @@ SequentialList::DataType SequentialList::select(unsigned int index) const
 
 unsigned int SequentialList::search(DataType val) const
 {
-	for (int i = 0; i < this->size_; i++)
+	for (int i = 0; i < size_; i++)
 	{
-		if (*(this->data_ + i) == val)
+		if (data_[i] == val)
 		{
 			return i;
 		}
 		
 	}
-	return this->size_;
+	return size_;
 }
 
 void SequentialList::print() const
 {
-	for (int i = 0; i < this->size_; i++)
+	for (int i = 0; i < size_; i++)
 	{
-		cout << *(this->data_ + i) << " ";
+		cout <<data_[i] << " ";
 	}
-	cout << "NULL" << endl;
+	cout<<endl;
 }
 
 bool SequentialList::insert(DataType val, unsigned int index)
@@ -97,9 +97,9 @@ bool SequentialList::remove(unsigned int index)
 {
 	if (index < this->size_){
 		for (int i = index; i < this->size_; i++) {
-			*(this->data_+i)=*(this->data_+(i+1));
+			data_[i]=data_[i+1];
 		}
-		*(this->data_+ this->size_ - 1) = NULL;
+		data_[size_-1] = NULL;
 		this->size_--;
 		return true;
 	}
@@ -108,19 +108,19 @@ bool SequentialList::remove(unsigned int index)
 
 bool SequentialList::remove_front()
 {
-	return this->remove(0);
+	return remove(0);
 }
 
 bool SequentialList::remove_back()
 {
-	return this->remove(this->size_ - 1);
+	return remove(this->size_ - 1);
 }
 
 bool SequentialList::replace(unsigned int index, DataType val)
 {
-	if (this->size_ > index)
+	if (size_ > index)
 	{
-		*(this->data_ + index) = val;
+		data_[index] = val;
 		return true;
 	}
 	return false;
@@ -129,30 +129,42 @@ bool SequentialList::replace(unsigned int index, DataType val)
 
 bool SequentialList::insert_sorted_asc(DataType val)
 {
-	int index = 0;
-	if (size_!=capacity_)
-	{
-		while (*(this->data_ + index) < val)
-		{
-			index++;
-		}
-		this->insert(val, index);
+	if (size_==0){
+		insert(val,0);
 		return true;
+	}
+	else if (is_sorted_asc()){
+		int index = 0;
+		if (size_!=capacity_)
+		{
+			while (data_[index] < val && index<size_)
+			{
+				index++;
+			}
+			insert(val, index);
+			return true;
+		}
 	}
 	return false;
 }
 
 bool SequentialList::insert_sorted_desc(DataType val)
 {
-	int index = 0;
-	if (size_!=capacity_)
-	{
-		while (*(this->data_ + index) > val)
-		{
-			index++;
-		}
-		this->insert(val, index);
+	if (size_==0){
+		insert(val,0);
 		return true;
+	}
+	else if (is_sorted_desc()){
+		int index = 0;
+		if (size_!=capacity_)
+		{
+			while (data_[index] > val && index<size_)
+			{
+				index++;
+			}
+			insert(val, index);
+			return true;
+		}
 	}
 	return false;	
 }
@@ -161,13 +173,13 @@ bool SequentialList::insert_sorted_desc(DataType val)
 bool SequentialList::is_sorted_asc() const
 {
 	if (size_!=0){
-		int prev = *this->data_;
+		int prev = data_[0];
 		for (int i= 0; i < this->size_ ; i++)
 		{
-			if (prev>*(data_+i))
+			if (prev>data_[i])
 				return false;
 			else
-				prev = *(data_+i);
+				prev = data_[i];
 		}
 	}
 	return true;
@@ -176,13 +188,13 @@ bool SequentialList::is_sorted_asc() const
 bool SequentialList::is_sorted_desc() const
 {
 	if (size_!=0){
-		int prev = *this->data_;
-		for (int i= 0; i < this->size_ ; i++)
+		int prev = data_[0];
+		for (int i= 0; i < size_ ; i++)
 		{
-			if (prev<*(data_+i))
+			if (prev<data_[i])
 				return false;
 			else
-				prev = *(data_+i);
+				prev = data_[i];
 		}
 	}
 	return true;
@@ -190,16 +202,14 @@ bool SequentialList::is_sorted_desc() const
 
 void SequentialList::sort_asc()
 {
-	if (size_!=0){
-		int cur = *data_;
+	if (size_>1){
 		for(int i=0;i<size_;i++){
 			for(int j=i;j<size_;j++){
-				if (cur>*(data_+1)){
-					int temp=cur;
-					cur=*(data_+1);
-					*(data_+1)=temp;
+				if (data_[i]>data_[j]){
+					DataType temp=data_[j];
+					data_[j]=data_[i];
+					data_[i]=temp;
 				}
-				cur= *(data_+1);
 			}
 			
 		}
@@ -209,19 +219,15 @@ void SequentialList::sort_asc()
 void SequentialList::sort_desc()
 {
 	if (size_!=0){
-		int cur = *data_;
 		for(int i=0;i<size_;i++){
 			for(int j=i;j<size_;j++){
-				if (cur<*(data_+1)){
-					int temp=cur;
-					cur=*(data_+1);
-					*(data_+1)=temp;
+				if (data_[i]<data_[j]){
+					DataType temp=data_[j];
+					data_[j]=data_[i];
+					data_[i]=temp;
 				}
-				cur= *(data_+1);
 			}
-			
 		}
 	}
 }
-
 
