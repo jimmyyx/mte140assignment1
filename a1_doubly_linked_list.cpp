@@ -68,7 +68,7 @@ DoublyLinkedList::DataType DoublyLinkedList::select(unsigned int index) const
 			cur = cur->next;
 		}
 	}else {
-		return size_;
+		return tail_->value;
 	}
 	return cur->value;
 }
@@ -255,22 +255,20 @@ bool DoublyLinkedList::is_sorted_desc()const{
 
 bool DoublyLinkedList::insert_sorted_asc(DataType val){
 	if (size_==0){
-		insert(0,val);
-		return true;
+		return insert(val, 0);
 	}
 	else if (is_sorted_asc()){
 		Node* cur = head_;
 		if (cur==NULL){
-			insert(0,val);
-			return true;
+			return this->insert(val, 0);
 		}
 		int index=0;
+		// Breaks right here
 		while (cur->value<val && index<size_){
 			index++;
 			cur=cur->next;
 		}
-		insert (val, index);
-		return true;
+		return this->insert (val, index);
 	}
 	return false;
 }
@@ -279,22 +277,20 @@ bool DoublyLinkedList::insert_sorted_asc(DataType val){
 bool DoublyLinkedList::insert_sorted_desc(DataType val)
 {
 	if (size_==0){
-		insert(0,val);
+		insert(val, 0);
 		return true;
 	}
 	else if (is_sorted_desc()){
 		Node* cur = head_;
 		if (cur==NULL){
-			insert(0,val);
-			return true;
+			return this->insert(val, 0);
 		}
 		int index=0;
 		while (cur->value>val&&index<size_){
 			index++;
 			cur=cur->next;
 		}
-		insert (val, index);
-		return true;
+		return this->insert (val, index);
 	}
 	return false;
 }
