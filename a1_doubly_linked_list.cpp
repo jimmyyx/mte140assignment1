@@ -67,10 +67,12 @@ DoublyLinkedList::DataType DoublyLinkedList::select(unsigned int index) const
 		{
 			cur = cur->next;
 		}
+		return cur->value;
 	}else {
-		return size_;
+		return tail_->value;
 	}
-	return cur->value;
+	
+
 }
 
 unsigned int DoublyLinkedList::search(DataType value) const
