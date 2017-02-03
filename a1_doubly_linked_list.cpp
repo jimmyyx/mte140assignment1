@@ -23,17 +23,14 @@ DoublyLinkedList::DoublyLinkedList()
 DoublyLinkedList::~DoublyLinkedList()
 {
 	Node* cur = head_;
-	if (cur!=NULL && head_ != tail_){
-	
-		while (cur->next != NULL)
-		{
+	if (cur!=NULL){
+		while (cur->next != NULL){
 			cur = cur->next;
 			delete cur->prev;
 			cur->prev=NULL;
 		}
 		
-		if (cur != NULL)
-		{
+		if (cur != NULL){
 			delete cur;
 			cur=NULL;
 		}
@@ -64,10 +61,8 @@ bool DoublyLinkedList::full() const
 DoublyLinkedList::DataType DoublyLinkedList::select(unsigned int index) const
 {
 	Node* cur = head_;
-	if (index >= 0 && index < size_)
-	{
-		for (int i = 0; i < index; i++)
-		{
+	if (index >= 0 && index < size_){
+		for (int i = 0; i < index; i++){
 			cur = cur->next;
 		}
 	}else {
@@ -92,8 +87,7 @@ void DoublyLinkedList::print() const
 {
 	Node* cur = head_;
 	cout << "NULL <- ";
-	for (int i = 0; i < size_; i++)
-	{
+	for (int i = 0; i < size_; i++){
 		cout  << cur->value << " <--> ";
 		cur = cur->next;
 	}
@@ -114,13 +108,12 @@ DoublyLinkedList::Node* DoublyLinkedList::getNode(unsigned int index) const
 
 bool DoublyLinkedList::insert(DataType value, unsigned int index)
 {
-	bool output = false;
 	if (index >= 0 && index <= size_ && size_+1 < CAPACITY)
 	{
 		Node* newNode = new Node(value);
 
 		if (size_==0){
-			//empty list
+			// empty list
 			head_= newNode;
 			tail_ = newNode;
 			newNode->prev=NULL;
@@ -140,6 +133,7 @@ bool DoublyLinkedList::insert(DataType value, unsigned int index)
 			newNode->prev = tail_;
 			tail_ = newNode;
 		}else{
+			// prev and next
 			Node* cur = head_;
 			for(int i=0;i<index;i++){
 				cur=cur->next;
@@ -149,10 +143,10 @@ bool DoublyLinkedList::insert(DataType value, unsigned int index)
 			newNode->next = cur;
 			cur->prev = newNode;
 		}
-		output = true;
 		size_++;
+		return true;	
 	}
-	return output;
+	return false;
 }
 
 bool DoublyLinkedList::insert_front(DataType value)
@@ -167,7 +161,6 @@ bool DoublyLinkedList::insert_back(DataType value)
 
 bool DoublyLinkedList::remove(unsigned int index)
 {
-	bool output = false;
 	if (index >= 0 && index < size_ && size_ > 0)
 	{
 		Node* old;
@@ -189,6 +182,7 @@ bool DoublyLinkedList::remove(unsigned int index)
 			tail_=tail_->prev;
 			tail_->next=NULL;
 		}else{
+			// prev and next
 			old=head_;
 			for(int i=0;i<index;i++){
 				old=old->next;
@@ -198,11 +192,11 @@ bool DoublyLinkedList::remove(unsigned int index)
 		}
 		delete old;
 		old = NULL;
-		output = true;
 		size_--;
+		return true;
 		
 	}
-	return output;
+	return false;
 }
 
 bool DoublyLinkedList::remove_front()
@@ -229,29 +223,27 @@ bool DoublyLinkedList::replace(unsigned int index, DataType value)
 }
 
 bool DoublyLinkedList::is_sorted_asc()const{
-	Node* cur = head_;
-	if (cur==NULL){
-		return true;
-	}
-	while (cur->next!=NULL){
-		if (cur->value>cur->next->value){
-			return false;
+	if (head_){
+		Node* cur = head_;
+		while (cur->next){
+			if (cur->value>cur->next->value){
+				return false;
+			}
+			cur=cur->next;
 		}
-		cur=cur->next;
 	}
 	return true;
 }
 
 bool DoublyLinkedList::is_sorted_desc()const{
-	Node* cur = head_;
-	if (cur==NULL){
-		return true;
-	}
-	while (cur->next!=NULL){
-		if (cur->value<cur->next->value){
-			return false;
+	if (head_){
+		Node* cur = head_;
+		while (cur->next){
+			if (cur->value<cur->next->value){
+				return false;
+			}
+			cur=cur->next;
 		}
-		cur=cur->next;
 	}
 	return true;
 }
@@ -277,8 +269,7 @@ bool DoublyLinkedList::insert_sorted_asc(DataType val){
 bool DoublyLinkedList::insert_sorted_desc(DataType val)
 {
 	if (size_==0){
-		insert(val, 0);
-		return true;
+		return insert(val, 0);
 	}
 	else if (is_sorted_desc()){
 		Node* cur = head_;

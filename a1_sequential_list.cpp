@@ -175,7 +175,7 @@ bool SequentialList::insert_sorted_desc(DataType val)
 
 bool SequentialList::is_sorted_asc() const
 {
-	if (size_!=0){
+	if (size_>1){
 		int prev = data_[0];
 		for (int i= 0; i < size_ ; i++)
 		{
@@ -190,7 +190,7 @@ bool SequentialList::is_sorted_asc() const
 
 bool SequentialList::is_sorted_desc() const
 {
-	if (size_!=0){
+	if (size_>1){
 		int prev = data_[0];
 		for (int i= 0; i < size_ ; i++)
 		{
