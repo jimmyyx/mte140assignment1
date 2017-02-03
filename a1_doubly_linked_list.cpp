@@ -91,7 +91,7 @@ void DoublyLinkedList::print() const
 {
 	Node* cur = head_;
 	cout << "NULL <- ";
-	for (int i = 0; i < this->size_; i++)
+	for (int i = 0; i < size_; i++)
 	{
 		cout  << cur->value << " <--> ";
 		cur = cur->next;
@@ -114,7 +114,7 @@ DoublyLinkedList::Node* DoublyLinkedList::getNode(unsigned int index) const
 bool DoublyLinkedList::insert(DataType value, unsigned int index)
 {
 	bool output = false;
-	if (index >= 0 && index <= this->size_ && this->size_+1 < this->CAPACITY)
+	if (index >= 0 && index <= size_ && size_+1 < CAPACITY)
 	{
 		Node* newNode = new Node(value);
 
@@ -139,7 +139,7 @@ bool DoublyLinkedList::insert(DataType value, unsigned int index)
 			newNode->prev = tail_;
 			tail_ = newNode;
 		}else{
-			Node* cur = this->head_;
+			Node* cur = head_;
 			for(int i=0;i<index;i++){
 				cur=cur->next;
 			}
@@ -149,25 +149,25 @@ bool DoublyLinkedList::insert(DataType value, unsigned int index)
 			cur->prev = newNode;
 		}
 		output = true;
-		this->size_++;
+		size_++;
 	}
 	return output;
 }
 
 bool DoublyLinkedList::insert_front(DataType value)
 {
-	return this->insert(value, 0);
+	return insert(value, 0);
 }
 
 bool DoublyLinkedList::insert_back(DataType value)
 {
-	return this->insert(value, this->size_);
+	return insert(value, size_);
 }
 
 bool DoublyLinkedList::remove(unsigned int index)
 {
 	bool output = false;
-	if (index >= 0 && index < this->size_ && this->size_ > 0)
+	if (index >= 0 && index < size_ && size_ > 0)
 	{
 		Node* old;
 		if (size_==1){
@@ -198,7 +198,7 @@ bool DoublyLinkedList::remove(unsigned int index)
 		delete old;
 		old = NULL;
 		output = true;
-		this->size_--;
+		size_--;
 		
 	}
 	return output;
@@ -267,7 +267,7 @@ bool DoublyLinkedList::insert_sorted_asc(DataType val){
 			if (cur->next)
 				cur=cur->next;
 		}
-		return this->insert (val, index);
+		return nsert (val, index);
 	}
 	return false;
 }
@@ -287,7 +287,7 @@ bool DoublyLinkedList::insert_sorted_desc(DataType val)
 			if (cur->next)
 				cur=cur->next;
 		}
-		return this->insert (val, index);
+		return insert (val, index);
 	}
 	return false;
 }
