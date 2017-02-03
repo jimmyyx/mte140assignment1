@@ -1,10 +1,10 @@
+//Dustin Hu and Jimmy Xu
+
 #include "a1_polynomial.hpp"
 #include <iostream>
 #define ASSERT_TRUE(T) if (!(T)) return false;
 #define ASSERT_FALSE(T) if ((T)) return false;
 
-
-//Dustin Hu and Jimmy Xu
 using namespace std;
 
 Polynomial::Polynomial(int* A, int size)
