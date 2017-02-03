@@ -35,7 +35,10 @@ void Polynomial::print() const
 
 int Polynomial::degree() const
 {
-	return this->list->size();
+	if (this->list->size() > 1)
+		return this->list->size() - 1;
+	else
+		return 0;
 }
 
 Polynomial* Polynomial::add(Polynomial* rhs)
@@ -144,19 +147,16 @@ void Polynomial::reduceList()
 // Check constrctors
 bool test1()
 {
-	unsigned int degree = 5;
 	int a[5] = {0};
+	int b[5] = {1, 2, 3, 4, 5};
 	Polynomial list1 = Polynomial();
 	Polynomial list2 = Polynomial(a, 5);
+	Polynomial list3 = Polynomial(b, 4);
+
 	ASSERT_TRUE(list1.degree() == 0);
 	ASSERT_TRUE(list2.degree() == 0);
-	
-	
-	for (int i = 0; i < 4; i++)
-	{
-		list1 = Polynomial(a, i);
-		ASSERT_TRUE(list1.degree() == 0);
-	}
+	ASSERT_TRUE(list3.degree() == 3);
+
 	return true;
 }
 
@@ -164,17 +164,20 @@ bool test1()
 bool test2()
 {
 	int a[5] = {1, 3, 6, 8, 10};
+	int b[4] = {1, 2, 3, 4};
 	Polynomial list1 = Polynomial();
 	Polynomial list2 = Polynomial(a, 5);
-	Polynomial list3 = Polynomial();
+	Polynomial list3 = Polynomial(b, 4);
 	
 	ASSERT_TRUE((list1.add(&list1))->degree() == 0);
-	ASSERT_TRUE((list2.add(&list2))->degree() == 5);
-	ASSERT_TRUE((list1.add(&list2))->degree() == 5);
-	ASSERT_TRUE((list2.add(&list1))->degree() == 5);
-
+	ASSERT_TRUE((list2.add(&list2))->degree() == 4);
+	ASSERT_TRUE((list1.add(&list2))->degree() == 4);
+	ASSERT_TRUE((list2.add(&list1))->degree() == 4);
 	
-	ASSERT_TRUE(((list2.add(&list1))->add(&list2))->degree() == 5);
+	ASSERT_TRUE((list3.add(&list1))->degree() == 3);
+	ASSERT_TRUE((list3.add(&list2))->degree() == 4);
+	ASSERT_TRUE(((list2.add(&list1))->add(&list3))->degree() == 4);
+	ASSERT_TRUE(((list2.add(&list1))->add(&list2))->degree() == 4);
 
 	return true;
 }
@@ -193,11 +196,12 @@ bool test3()
 	Polynomial list3 = Polynomial(a, 5);
 	
 	ASSERT_TRUE((list1.sub(&list1))->degree() == 0);
-	ASSERT_TRUE((list1.sub(&list2))->degree() == 3);
-	ASSERT_TRUE((list1.sub(&list3))->degree() == 5);
-	ASSERT_TRUE((list2.sub(&list3))->degree() == 5);
-	
-
+	ASSERT_TRUE((list2.sub(&list2))->degree() == 0);
+	ASSERT_TRUE((list1.sub(&list2))->degree() == 2);
+	ASSERT_TRUE((list1.sub(&list3))->degree() == 4);
+	ASSERT_TRUE((list2.sub(&list3))->degree() == 4);
+	ASSERT_TRUE(((list3.sub(&list2))->sub(&list1))->degree() == 4);
+	ASSERT_TRUE(((list3.sub(&list1))->sub(&list2))->degree() == 4);
 	return true;
 }
 
@@ -210,28 +214,27 @@ bool test4()
 	{
 		a[i] = i;
 	}
-	Polynomial list1;
+	Polynomial list1 = Polynomial();
 	Polynomial list2 = Polynomial(a, 8);
+	Polynomial list3 = Polynomial(a, 4);
 	
 	ASSERT_TRUE((list1.mul(&list1))->degree() == 0); 
 	ASSERT_TRUE((list1.mul(&list2))->degree() == 0);
 	ASSERT_TRUE((list2.mul(&list1))->degree() == 0);
-	ASSERT_TRUE((list2.mul(&list2))->degree() == 15);
-	
-
+	ASSERT_TRUE((list2.mul(&list2))->degree() == 14);
+	ASSERT_TRUE((list3.mul(&list3))->degree() == 6);
+		
+	ASSERT_TRUE((list2.mul(&list3))->degree() == 10);
+	ASSERT_TRUE(((list2.mul(&list3))->mul(&list1))->degree() == 0);
 	return true;
 }
 
 
 int main()
 {
-	int foo[5] = {1, 1, 2, 3, 4};
-	int bar[4] = {0};
-	
-	Polynomial* A = new Polynomial( );
-	Polynomial* B = new Polynomial(bar, 2);
-	Polynomial* C = new Polynomial();
-	
+	int a[4] = {1, 1, 0, 0};
+	Polynomial list1 = Polynomial(a, 2);
+
 	bool testResults[4];
 	testResults[0] = test1();
 	testResults[1] = test2();
