@@ -14,6 +14,7 @@ Polynomial::Polynomial(int* A, int size)
 	{
 		this->list->insert_back(*(A + i));
 	}
+	this->reduceList();
 }
 
 Polynomial::Polynomial() 
@@ -64,7 +65,7 @@ Polynomial* Polynomial::add(Polynomial* rhs)
 			output->list->insert_back(rhs->list->select(i));
 		}
 	}
-
+	this->reduceList();
 	return output;
 }
 
@@ -130,7 +131,7 @@ void Polynomial::reduceList()
 {
 	if (this->list->tail_)
 	{
-		while (this->list->tail_ && this->list->tail_->value == 0 && this->list->tail_ != this->list->head_)
+		while (this->list->tail_ && this->list->tail_->value == 0)
 		{
 			this->list->remove_back();
 		}
@@ -148,13 +149,13 @@ bool test1()
 	Polynomial list1 = Polynomial();
 	Polynomial list2 = Polynomial(a, 5);
 	ASSERT_TRUE(list1.degree() == 0);
-	ASSERT_TRUE(list2.degree() == degree);
+	ASSERT_TRUE(list2.degree() == 0);
 	
 	
 	for (int i = 0; i < 4; i++)
 	{
 		list1 = Polynomial(a, i);
-		ASSERT_TRUE(list1.degree() == i);
+		ASSERT_TRUE(list1.degree() == 0);
 	}
 	return true;
 }
@@ -225,16 +226,22 @@ bool test4()
 int main()
 {
 	int foo[5] = {1, 1, 2, 3, 4};
-	int bar[4] = {2, 1, 2, 3};
+	int bar[4] = {0};
 	
-	Polynomial* A = new Polynomial(foo, 1);
-	Polynomial* B = new Polynomial(bar, 1);
+	Polynomial* A = new Polynomial( );
+	Polynomial* B = new Polynomial(bar, 2);
 	Polynomial* C = new Polynomial();
-	Polynomial* D = A->mul(B);
-
-	Polynomial list = Polynomial(foo, 1);
-
-	cout << D->degree() << " " << C->degree();
-	cout << test4();
+	
+	bool testResults[4];
+	testResults[0] = test1();
+	testResults[1] = test2();
+	testResults[2] = test3();
+	testResults[3] = test4();
+	
+	
+	for (int i = 0; i < 4; i++)
+	{
+		cout << testResults[i];
+	}
 	return 0;
 }
