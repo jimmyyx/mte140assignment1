@@ -1,8 +1,9 @@
+//Dustin Hu and Jimmy Xu
+
 #include "a1_doubly_linked_list.hpp"
 #include "a1_tests.hpp"
 #include <iostream>
 
-//Dustin Hu and Jimmy Xu
 using namespace std;
 
 DoublyLinkedList::Node::Node(DataType data)
@@ -267,7 +268,7 @@ bool DoublyLinkedList::insert_sorted_asc(DataType val){
 			if (cur->next)
 				cur=cur->next;
 		}
-		return nsert (val, index);
+		return insert (val, index);
 	}
 	return false;
 }
@@ -322,6 +323,3 @@ void DoublyLinkedList::sort_desc()
 		}
 	}
 }
-
-
-

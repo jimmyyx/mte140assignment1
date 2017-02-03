@@ -1,8 +1,11 @@
+//Dustin Hu and Jimmy Xu
+
 #include "a1_sequential_list.hpp"
 #include "a1_tests.hpp"
 #include <iostream>
 
 using namespace std;
+
 SequentialList::SequentialList(unsigned int cap)
 {
 	capacity_ = cap;
@@ -38,10 +41,10 @@ bool SequentialList::full() const
 
 SequentialList::DataType SequentialList::select(unsigned int index) const
 {
-	DataType output = *(this->data_ + this->size_ - 1);
-	if (index < this->size_ && index >= 0)
+	DataType output = *(data_ + size_ - 1);
+	if (index < size_ && index >= 0)
 	{
-		output = *(this->data_ + index);
+		output = *(data_ + index);
 	}
 	return output;
 
@@ -72,12 +75,12 @@ void SequentialList::print() const
 bool SequentialList::insert(DataType val, unsigned int index)
 {
 	
-	if (this->size_+1 <= this->capacity_ && index <= this->size_){
-		for (int i=this->size_;i>index;i--){
-			*(this->data_+i)=*(this->data_+(i-1));
+	if (size_+1 <= capacity_ && index <= size_){
+		for (int i=size_;i>index;i--){
+			*(data_+i)=*(data_+(i-1));
 		}
-		*(this->data_+index)=val;
-		this->size_++;
+		*(data_+index)=val;
+		size_++;
 		return true;
 	}
 	return false;
@@ -85,22 +88,22 @@ bool SequentialList::insert(DataType val, unsigned int index)
 
 bool SequentialList::insert_front(DataType val)
 {
-	return this->insert(val, 0);
+	return insert(val, 0);
 }
 
 bool SequentialList::insert_back(DataType val)
 {
-	return this->insert(val, this->size_);
+	return insert(val, size_);
 }
 
 bool SequentialList::remove(unsigned int index)
 {
-	if (index < this->size_){
-		for (int i = index; i < this->size_; i++) {
+	if (index < size_){
+		for (int i = index; i < size_; i++) {
 			data_[i]=data_[i+1];
 		}
 		data_[size_-1] = NULL;
-		this->size_--;
+		size_--;
 		return true;
 	}
 	return false;
@@ -113,7 +116,7 @@ bool SequentialList::remove_front()
 
 bool SequentialList::remove_back()
 {
-	return remove(this->size_ - 1);
+	return remove(size_ - 1);
 }
 
 bool SequentialList::replace(unsigned int index, DataType val)
@@ -174,7 +177,7 @@ bool SequentialList::is_sorted_asc() const
 {
 	if (size_!=0){
 		int prev = data_[0];
-		for (int i= 0; i < this->size_ ; i++)
+		for (int i= 0; i < size_ ; i++)
 		{
 			if (prev>data_[i])
 				return false;
