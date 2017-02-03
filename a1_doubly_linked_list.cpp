@@ -23,7 +23,7 @@ DoublyLinkedList::DoublyLinkedList()
 DoublyLinkedList::~DoublyLinkedList()
 {
 	Node* cur = head_;
-	if (cur!=NULL){
+	if (cur!=NULL && head_!=tail_){
 		while (cur->next != NULL){
 			cur = cur->next;
 			delete cur->prev;
