@@ -2,6 +2,7 @@
 #include "a1_tests.hpp"
 #include <iostream>
 
+//Dustin Hu and Jimmy Xu
 using namespace std;
 
 DoublyLinkedList::Node::Node(DataType data)

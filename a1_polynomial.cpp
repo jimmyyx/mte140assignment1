@@ -3,6 +3,8 @@
 #define ASSERT_TRUE(T) if (!(T)) return false;
 #define ASSERT_FALSE(T) if ((T)) return false;
 
+
+//Dustin Hu and Jimmy Xu
 using namespace std;
 
 Polynomial::Polynomial(int* A, int size)
@@ -38,14 +40,14 @@ int Polynomial::degree() const
 Polynomial* Polynomial::add(Polynomial* rhs)
 {
 	Polynomial* output = new Polynomial();
-	if (this->degree() > rhs->degree())
+	if (this->list->size() > rhs->list->size())
 	{
 		// THis is of higher degree than RHS
-		for (int i = 0; i < rhs->degree(); i++)
+		for (int i = 0; i < rhs->list->size(); i++)
 		{
 			output->list->insert_back(this->list->select(i) + rhs->list->select(i));
 		}
-		for (int i = rhs->degree(); i < this->degree(); i++)
+		for (int i = rhs->list->size(); i < this->list->size(); i++)
 		{
 			output->list->insert_back(this->list->select(i));
 		}
@@ -53,11 +55,11 @@ Polynomial* Polynomial::add(Polynomial* rhs)
 	else
 	{
 		// RHS has a bigger degree than LHS
-		for (int i = 0; i < this->degree(); i++)
+		for (int i = 0; i < this->list->size(); i++)
 		{
 			output->list->insert_back(this->list->select(i) + rhs->list->select(i));
 		}
-		for (int i = this->degree(); i < rhs->degree(); i++)
+		for (int i = this->list->size(); i < rhs->list->size(); i++)
 		{
 			output->list->insert_back(rhs->list->select(i));
 		}
@@ -69,14 +71,14 @@ Polynomial* Polynomial::add(Polynomial* rhs)
 Polynomial* Polynomial::sub(Polynomial* rhs)
 {
 	Polynomial* output = new Polynomial();
-	if (this->degree() > rhs->degree())
+	if (this->list->size() > rhs->list->size())
 	{
 		// THis is of higher degree than RHS
-		for (int i = 0; i < rhs->degree(); i++)
+		for (int i = 0; i < rhs->list->size(); i++)
 		{
 			output->list->insert_back(this->list->select(i) - rhs->list->select(i));
 		}
-		for (int i = rhs->degree(); i < this->degree(); i++)
+		for (int i = rhs->list->size(); i < this->list->size(); i++)
 		{
 			output->list->insert_back(this->list->select(i));
 		}
@@ -84,16 +86,16 @@ Polynomial* Polynomial::sub(Polynomial* rhs)
 	else
 	{
 		// RHS has a bigger degree than LHS
-		for (int i = 0; i < this->degree(); i++)
+		for (int i = 0; i < this->list->size(); i++)
 		{
 			output->list->insert_back(this->list->select(i) - rhs->list->select(i));
 		}
-		for (int i = this->degree(); i < rhs->degree(); i++)
+		for (int i = this->list->size(); i < rhs->list->size(); i++)
 		{
 			output->list->insert_back(-1 * rhs->list->select(i));
 		}
 	}
-
+	output->reduceList();
 	return output;
 }
 
@@ -102,13 +104,14 @@ Polynomial* Polynomial::mul(Polynomial* rhs)
 {
 	Polynomial* output = new Polynomial();
 	Polynomial* temp = new Polynomial();
-	for (int i = 0; i < this->degree(); i++)
+	// Min and max is becaues otherwise it might try to multiply by a null value
+	for (int i = 0; i < min(this->list->size(), rhs->list->size()); i++)
 	{
 		for (int k = 0; k < i; k++)
 		{
 			temp->list->insert_back(0);
 		}
-		for (int j = 0; j < this->degree(); j++)
+		for (int j = 0; j < max(this->list->size(), rhs->list->size()); j++)
 		{
 			temp->list->insert_back(this->list->select(j) * rhs->list->select(i));
 		}
@@ -118,7 +121,20 @@ Polynomial* Polynomial::mul(Polynomial* rhs)
 			temp->list->remove_back();
 		}
 	}
+	output->reduceList();
 	return output;
+}
+
+
+void Polynomial::reduceList()
+{
+	if (this->list->tail_)
+	{
+		while (this->list->tail_ && this->list->tail_->value == 0 && this->list->tail_ != this->list->head_)
+		{
+			this->list->remove_back();
+		}
+	}
 }
 
 
@@ -127,23 +143,98 @@ Polynomial* Polynomial::mul(Polynomial* rhs)
 // Check constrctors
 bool test1()
 {
+	unsigned int degree = 5;
+	int a[5] = {0};
+	Polynomial list1 = Polynomial();
+	Polynomial list2 = Polynomial(a, 5);
+	ASSERT_TRUE(list1.degree() == 0);
+	ASSERT_TRUE(list2.degree() == degree);
 	
+	
+	for (int i = 0; i < 4; i++)
+	{
+		list1 = Polynomial(a, i);
+		ASSERT_TRUE(list1.degree() == i);
+	}
+	return true;
 }
+
+// Check addition
+bool test2()
+{
+	int a[5] = {1, 3, 6, 8, 10};
+	Polynomial list1 = Polynomial();
+	Polynomial list2 = Polynomial(a, 5);
+	Polynomial list3 = Polynomial();
+	
+	ASSERT_TRUE((list1.add(&list1))->degree() == 0);
+	ASSERT_TRUE((list2.add(&list2))->degree() == 5);
+	ASSERT_TRUE((list1.add(&list2))->degree() == 5);
+	ASSERT_TRUE((list2.add(&list1))->degree() == 5);
+
+	
+	ASSERT_TRUE(((list2.add(&list1))->add(&list2))->degree() == 5);
+
+	return true;
+}
+
+// Check subtraciton
+bool test3()
+{
+	int a[8];
+	for (int i = 0; i < 8; i++)
+	{
+		a[i] = i + 3;
+	}
+	
+	Polynomial list1 = Polynomial();
+	Polynomial list2 = Polynomial(a, 3);
+	Polynomial list3 = Polynomial(a, 5);
+	
+	ASSERT_TRUE((list1.sub(&list1))->degree() == 0);
+	ASSERT_TRUE((list1.sub(&list2))->degree() == 3);
+	ASSERT_TRUE((list1.sub(&list3))->degree() == 5);
+	ASSERT_TRUE((list2.sub(&list3))->degree() == 5);
+	
+
+	return true;
+}
+
+
+// Check multiplication
+bool test4()
+{
+	int a[8];
+	for (int i = 0; i < 8; i++)
+	{
+		a[i] = i;
+	}
+	Polynomial list1;
+	Polynomial list2 = Polynomial(a, 8);
+	
+	ASSERT_TRUE((list1.mul(&list1))->degree() == 0); 
+	ASSERT_TRUE((list1.mul(&list2))->degree() == 0);
+	ASSERT_TRUE((list2.mul(&list1))->degree() == 0);
+	ASSERT_TRUE((list2.mul(&list2))->degree() == 15);
+	
+
+	return true;
+}
+
+
 int main()
 {
-	int foo[5] = {0, 1, 2, 3, 4};
-	int bar[4] = {0, 1, 2, 3};
+	int foo[5] = {1, 1, 2, 3, 4};
+	int bar[4] = {2, 1, 2, 3};
 	
-	Polynomial* A = new Polynomial(foo, 5);
-	Polynomial* B = new Polynomial(bar, 4);
+	Polynomial* A = new Polynomial(foo, 1);
+	Polynomial* B = new Polynomial(bar, 1);
 	Polynomial* C = new Polynomial();
-	Polynomial* D = C->mul(A);
-	
-	
-	A->print();
-	B->print();
-	D->print();
-	
-	
+	Polynomial* D = A->mul(B);
+
+	Polynomial list = Polynomial(foo, 1);
+
+	cout << D->degree() << " " << C->degree();
+	cout << test4();
 	return 0;
 }

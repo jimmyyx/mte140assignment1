@@ -2,7 +2,7 @@
 #define A1_POLYNOMIAL_HPP
 
 #include "a1_doubly_linked_list.hpp"
-
+//Dustin Hu and Jimmy Xu
 
 class Polynomial
 {
@@ -17,6 +17,7 @@ class Polynomial
 		Polynomial* mul(Polynomial* rhs);
 	private:
 		DoublyLinkedList* list;
+		void reduceList();
 };
 
 
