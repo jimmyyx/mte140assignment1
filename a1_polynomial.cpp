@@ -1,10 +1,10 @@
+//Dustin Hu and Jimmy Xu
+
 #include "a1_polynomial.hpp"
 #include <iostream>
 #define ASSERT_TRUE(T) if (!(T)) return false;
 #define ASSERT_FALSE(T) if ((T)) return false;
 
-
-//Dustin Hu and Jimmy Xu
 using namespace std;
 
 Polynomial::Polynomial(int* A, int size)
@@ -144,7 +144,6 @@ void Polynomial::reduceList()
 // Check constrctors
 bool test1()
 {
-	unsigned int degree = 5;
 	int a[5] = {0};
 	Polynomial list1 = Polynomial();
 	Polynomial list2 = Polynomial(a, 5);
